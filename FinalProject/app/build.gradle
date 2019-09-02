@@ -2,65 +2,90 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:1.0.3'
-    }
+     repositories {
+          jcenter()
+     }
+     dependencies {
+          classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:1.0.3'
+     }
 }
 
 android {
-    compileSdkVersion 28
+     compileSdkVersion 28
 
-    defaultConfig {
-        applicationId "com.udacity.gradle.builditbigger"
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
+     defaultConfig {
+          applicationId "com.udacity.gradle.builditbigger"
+          minSdkVersion 23
+          targetSdkVersion 28
+          versionCode 1
+          versionName "1.0"
+          multiDexEnabled true
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+          testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+     buildTypes {
+          release {
+               minifyEnabled false
+               proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+          }
+     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-    }
+     flavorDimensions "flavor"
+     productFlavors {
+          free {
+               applicationId "com.udacity.gradle.builditbigger.free"
+               dimension "flavor"
 
+          }
+          paid {
+               applicationId "com.udacity.gradle.builditbigger.paid"
+               dimension "flavor"
+
+          }
+
+     }
+
+     sourceSets {
+          free {
+               java.srcDirs('src.free/java')
+          }
+          paid {
+               java.srcDirs('src.paid/java')
+          }
+     }
+
+     packagingOptions {
+          exclude 'META-INF/DEPENDENCIES'
+          exclude 'META-INF/LICENSE'
+          exclude 'META-INF/LICENSE.txt'
+          exclude 'META-INF/license.txt'
+          exclude 'META-INF/NOTICE'
+          exclude 'META-INF/NOTICE.txt'
+          exclude 'META-INF/notice.txt'
+          exclude 'META-INF/ASL2.0'
+     }
 
 
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    endpointsServer project(path: ':backend', configuration: 'endpoints')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.google.android.gms:play-services-ads:18.1.1'
-    implementation 'com.google.api-client:google-api-client:1.30.2'
-    implementation 'com.google.http-client:google-http-client-android:1.31.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+     implementation fileTree(dir: 'libs', include: ['*.jar'])
+     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+     endpointsServer project(path: ':backend', configuration: 'endpoints')
+     implementation project(path: ':JokeJavaLibrary')
+     implementation project(path: ':jokeandroidlibrarywithactivity')
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+     implementation 'com.android.support:appcompat-v7:28.0.0'
+     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+          exclude group: 'com.android.support', module: 'support-annotations'
+     })
+
+     freeImplementation 'com.google.android.gms:play-services-ads:18.2.0'
+     implementation 'com.google.api-client:google-api-client:1.30.2'
+     implementation 'com.google.http-client:google-http-client-android:1.31.0'
+     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
 
-    testImplementation 'junit:junit:4.13-beta-3'
-    implementation project(path: ':JokeJavaLibrary')
-    implementation project(path: ':jokeandroidlibrarywithactivity')
+     testImplementation 'junit:junit:4.13-beta-3'
 }
